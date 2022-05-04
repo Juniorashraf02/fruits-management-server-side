@@ -38,11 +38,26 @@ async function run() {
         });
 
         app.delete('/items/:id', async(req, res)=>{
-            const id=req.params.id;
+            const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const result = await productCollection.deleteOne(query);
             res.send(result);
             
+        });
+
+        app.put('/items/:id', async(req, res) => {
+            console.log({req})
+            const id = req.params.id;
+            const data = req.body;
+            console.log(data);
+            
+            const filter = {_id: ObjectId(id)};
+            const options = {upsert: true};
+            const updatedDoc = {
+                $set: {quantity:data.newQuantity}
+            };
+            const result = await productCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
         })
 
 
