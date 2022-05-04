@@ -17,6 +17,8 @@ async function run() {
         await client.connect();
         const productCollection = client.db('warehouseMangement').collection('service');
 
+
+        // getting all the products
         app.get('/items', async (req, res) => {
             const query = {};
             const cursor = productCollection.find(query);
@@ -24,6 +26,8 @@ async function run() {
             res.send(items);
         });
 
+
+        // getting a specific item by id
         app.get('/items/:id', async(req, res) => {
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
@@ -31,12 +35,16 @@ async function run() {
             res.send(items);
         });
 
+
+        // posting a new product
         app.post('/add-item',async(req, res)=>{
             const newItem = req.body;
             const result = await productCollection.insertOne(newItem);
             res.send(result);
         });
 
+
+        // Delete a product by id 
         app.delete('/items/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
@@ -45,6 +53,8 @@ async function run() {
             
         });
 
+
+        // update a info of a product by id
         app.put('/items/:id', async(req, res) => {
             console.log({req})
             const id = req.params.id;
@@ -59,9 +69,6 @@ async function run() {
             const result = await productCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
         })
-
-
-
     }
     finally { }
 }
