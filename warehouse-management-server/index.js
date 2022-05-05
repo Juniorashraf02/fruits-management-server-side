@@ -81,7 +81,7 @@ async function run() {
             res.send(result);
         });
 
-        app.get('/items', async(req, res)=>{
+        app.get('/myitem', async(req, res)=>{
             const email = req.query.email;
             console.log(email);
             const query = {email:email};
@@ -90,14 +90,7 @@ async function run() {
             res.send(items);
         });
 
-        // Delete a product by id 
-        // app.delete('/newItem/:id', async(req, res)=>{
-        //     const id = req.params.id;
-        //     const query = {_id: ObjectId(id)};
-        //     const result = await productCollection.deleteOne(query);
-        //     res.send(result);
-            
-        // });
+      
 
         
 
