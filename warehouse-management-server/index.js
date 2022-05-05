@@ -16,6 +16,8 @@ async function run() {
     try {
         await client.connect();
         const productCollection = client.db('warehouseMangement').collection('service');
+        const newCollection = client.db('warehouseMangement').collection('newItem');
+        
 
 
         // getting all the products
@@ -53,6 +55,8 @@ async function run() {
             
         });
 
+        
+
 
         // update a info of a product by id
         app.put('/items/:id', async(req, res) => {
@@ -68,7 +72,37 @@ async function run() {
             };
             const result = await productCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
-        })
+        });
+
+
+        app.post('/items', async (req, res) => {
+            const newItem = req.body;
+            const result = await productCollection.insertOne(newItem);
+            res.send(result);
+        });
+
+        app.get('/items', async(req, res)=>{
+            const email = req.query.email;
+            console.log(email);
+            const query = {email:email};
+            const cursor = productCollection.find(query);
+            const items = await cursor.toArray();
+            res.send(items);
+        });
+
+        // Delete a product by id 
+        // app.delete('/newItem/:id', async(req, res)=>{
+        //     const id = req.params.id;
+        //     const query = {_id: ObjectId(id)};
+        //     const result = await productCollection.deleteOne(query);
+        //     res.send(result);
+            
+        // });
+
+        
+
+        
+
     }
     finally { }
 }
