@@ -16,6 +16,9 @@ function verifyToken(req, res, next) {
         return res.status(401).send('Unauthorize access!')
     }
 
+    // jwt codes
+
+
     // const token = authHeader.split(' ')[1];
     // jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
     //     if(err){
