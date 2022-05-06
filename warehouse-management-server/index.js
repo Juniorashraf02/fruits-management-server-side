@@ -16,13 +16,13 @@ function verifyToken(req, res, next) {
         return res.status(401).send('Unauthorize access!')
     }
 
-    const token = authHeader.split(' ')[1];
-    jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
-        if(err){
-            return res.status(403).send('Fobidden access')
-        }
-        console.log('decoded', decoded);
-    })
+    // const token = authHeader.split(' ')[1];
+    // jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+    //     if(err){
+    //         return res.status(403).send('Fobidden access')
+    //     }
+    //     console.log('decoded', decoded);
+    // })
     next();
 }
 
