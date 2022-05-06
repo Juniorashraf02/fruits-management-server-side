@@ -6,6 +6,25 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
+
+
+
+function verifyToken(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if(!authHeader) {
+        return res.status(401).send('Unauthorize access!')
+    }
+
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+        if(err){
+            return res.status(403).send('Fobidden access')
+        }
+        console.log('decoded', decoded);
+    })
+    next();
+}
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -20,7 +39,7 @@ async function run() {
         
 
 
-        // getting all the products
+        // get api
         app.get('/items', async (req, res) => {
             const query = {};
             const cursor = productCollection.find(query);
@@ -81,14 +100,30 @@ async function run() {
             res.send(result);
         });
 
-        app.get('/myitem', async(req, res)=>{
+
+
+        // get item by email filtering
+        app.get('/myitem',verifyToken, async(req, res)=>{
+         
             const email = req.query.email;
-            console.log(email);
-            const query = {email:email};
+            
+            const query = {email};
             const cursor = productCollection.find(query);
             const items = await cursor.toArray();
             res.send(items);
         });
+
+
+        // AUTH
+        app.post('/login', async(req, res)=>{
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN,{
+                expiresIn: '1d'
+            });
+            res.send({accessToken});
+        })
+
+
 
       
 
