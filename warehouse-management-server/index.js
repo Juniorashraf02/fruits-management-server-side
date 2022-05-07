@@ -150,5 +150,3 @@ app.listen(port, () => {
 })
 
 
-// warehouseManagement
-// zAK98yOMwQ38XoGC
